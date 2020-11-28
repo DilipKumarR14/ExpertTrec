@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Testing" default="jar" basedir=".">
+
+	<property name="repopath.dir" location="C:\Users\dilip\.m2\repository" />
+	<property name="clpath.dir" location="C:\Users\dilip\Desktop\JavaProgram\REsTApi\Expertrec" />
+	<property name="build.dir" value="build" />
+	<property name="jar.dir" value="jar" />
+	<property name="lib.dir" value="lib" />
+
+	<target name="delete">
+		<delete dir="${build.dir}" />
+		<delete dir="${jar.dir}" />
+	</target>
+
+	<target name="create" depends="delete" description="creating the folder">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${jar.dir}" />
+	</target>
+
+	<target name="compile" depends="create" description="compiling the code">
+		<javac classpathref="classpath" srcdir="${clpath.dir}\src" destdir="${clpath.dir}\${build.dir}" includes="**/*.java" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${clpath.dir}\${jar.dir}\App.jar" basedir="${clpath.dir}\${build.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="com.dilip.expertrec.App" />
+			</manifest>
+			 <fileset dir="${lib.dir}" includes="**/*.jar" />
+		</jar>
+	</target>
+	
+	<path id="classpath">
+		<pathelement location="${repopath.dir}\org\apache\httpcomponents\httpclient\4.5.12\httpclient-4.5.12.jar" />
+		<pathelement location="${repopath.dir}\org\apache\httpcomponents\httpcore\4.4.13\httpcore-4.4.13.jar" />
+		<pathelement location="${repopath.dir}\commons-logging\commons-logging\1.2\commons-logging-1.2.jar" />
+		<pathelement location="${repopath.dir}\commons-codec\commons-codec\1.11\commons-codec-1.11.jar" />
+		<pathelement location="${repopath.dir}\com\google\code\gson\gson\2.8.6\gson-2.8.6.jar" />
+	</path>
+
+</project>
