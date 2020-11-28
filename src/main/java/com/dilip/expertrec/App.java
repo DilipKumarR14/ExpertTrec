@@ -23,6 +23,9 @@ public class App
 {
 	public static void main(String[] args)
 	{
+		/* args[0] = https://reqres.in/api/users/2
+		 * args[1] = output.txt
+		 */
 		if(args.length == 2) {
 			if(args[1] !=null && args[0] != null && App.isValid(args[0])) {
 				App.sendGETRequest(args[0], args[1]);
@@ -32,12 +35,18 @@ public class App
 		}
 	}
 
+	/**
+	 * Method send the get request and print header to console
+	 * and content into the output.txt file which is passed from 
+	 * command line
+	 * @param url
+	 * @param filename
+	 */
 	public static void sendGETRequest(String url, String filename) {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet request = null;
 		CloseableHttpResponse response = null;
 
-		//https://httpbin.org/ 
 		try {
 
 			request = new HttpGet(url);
@@ -54,7 +63,7 @@ public class App
 						System.out.println(headerData);
 					}
 				}
-
+				// Creating the new file
 				File file = new File(filename);
 				String line = "";
 				String temp = "";
@@ -65,17 +74,18 @@ public class App
 					}
 					rd.close();
 					JsonElement jelement = new JsonParser().parse(temp);
-				    JsonObject  jsonObject = jelement.getAsJsonObject();
-				    jsonObject = jsonObject.getAsJsonObject("data");
-			    	BufferedWriter out = new BufferedWriter(new FileWriter(file));;
-				    for(Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-				         out.write(entry.getKey() + " : " + entry.getValue() + "\n");
-				         out.write("\n");
-				         out.flush();
-				    }
-			         out.close();
+					JsonObject  jsonObject = jelement.getAsJsonObject();
+					jsonObject = jsonObject.getAsJsonObject("data");
+					BufferedWriter out = new BufferedWriter(new FileWriter(file));;
+					for(Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+						//Writing the content to file
+						out.write(entry.getKey() + " : " + entry.getValue() + "\n");
+						out.write("\n");
+						out.flush();
+					}
+					out.close();
 				}
-				
+				// successful termination
 				System.exit(0);
 			} else {
 				System.out.println("Response Code : "+response.getStatusLine().getStatusCode());
